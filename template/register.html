@@ -1,7 +1,8 @@
-
+{% extends "base.html" %}
+{% block body %}
 <div class="register">
     <h1>Register For An Account</h1>
-    <form method="POST" action='/create'>
+    <form method="POST" action='/create' class="reg">
         <input name="name" placeholder="name" type="text"><br>
         <input name="email" placeholder="email" type="text"><br>
         <input name="username" placeholder="Username" type="text"><br>
@@ -13,3 +14,4 @@
 
 
 </div>
+{% endblock %}

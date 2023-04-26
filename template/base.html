@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel= "stylesheet" href= "../static/styles/header.css">
+    <title>My site</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="topBar">
+        <div class="">
+          <h1>Start Online Shopping!</h1>
+          <ul class="barItem">
+
+            <li><a href="/">HOME</a></li>
+            <li><a href="/reg">REGISTER ACCOUNT</a></li>
+            <li><a href="/">LOGIN ACCOUNT</a></li>
+            <li><a href="/">PRODUCTS</a></li>
+            <li><a href="/">CHAT</a></li>
+            <li><a href="/">CART</a></li>
+            <li><a href="/">MY ACCOUNT</a></li>
+            <li><a href="/">MY ORDERS</a></li>
+            <li><a href="/">RECEIVED ORDERS</a></li>
+
+          </ul>
+        </div>
+
+
+      </div>
+    </header>
+
+    {% block body %}
+    {% endblock %}
+
+    <footer class="footer">
+      <div class="footer__addr">
+        <h2>Contact</h2>
+
+        <address>
+          5534 Somewhere In. The World 22193-10212<br>
+
+          <a class="footer__btn" href="mailto:example@gmail.com">Email Us</a>
+        </address>
+      </div>
+
+    </footer>
+
+  </body>
+</html>
+
