@@ -1,0 +1,17 @@
+{% extends "bases.html" %}
+{% block body %}
+
+<div class="create_exam">
+    <form action="/add_product" method="POST">
+        <input type="number" name="testID" placeholder="Enter test number:"> <br>
+        <input type="text" name="Q1" placeholder="Question 1:"> <br>
+        <input type="text" name="Q2" placeholder="Question 2:"> <br>
+        <input type="text" name="Q3" placeholder="Question 3:"> <br>
+        <input type="number" name="UserId" placeholder="Insert User Id:"> <br>
+        <input type="submit" value="Submit" class="input_submit">
+    </form>
+</div>
+
+
+
+{% endblock %}
