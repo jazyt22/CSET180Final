@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+	<header>
+        {% if session.logged_in %}
+        <h2>Logged in as <a href="/login">{{session.full_name}}</a></h2>
+        {% else %}
+        <h2>Welcome to the Riley Is Great Shopping Network <3</h2>
+        {% endif %}
+        <div>
+            <table>
+                <tbody>
+                <tr>
+                    <input type="text"><button>Search</button>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </header>
+
+
+
+
+
+{% endblock %}

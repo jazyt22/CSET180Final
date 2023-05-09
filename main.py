@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template, request, url_for, flash, redirect,session
 from sqlalchemy import Column, Integer, String, Numeric, create_engine, text
 
 app = Flask(__name__, template_folder='template')
@@ -20,72 +20,92 @@ def p(str):
 @app.route('/')
 def home():
     return render_template('home.html')
-#
-# # Define a function to check if the email already exists in the database
-# def check_email_exists(email):
-#     cursor = conn_str.cursor()
-#     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-#     user = cursor.fetchone()
-#     cursor.close()
-#     if user is not None:
-#         return True
-#     else:
-#         return False
-
-
-#regitser account
-
-# @app.route('/register', methods=['GET', 'POST'])
-# def create_account():
-#     if request.method == 'POST':
-#         conn.execute(text("INSERT INTO register VALUES (:name, :email, :username, :password, :userID, :account_type)"),request.form)
-#         conn.commit()
-#     return render_template("register.html")
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def create_account():
     if request.method == 'POST':
         email = request.form['email']
-        # Check if the email already exists in the database
         user = conn.execute(text("SELECT * FROM register WHERE email=:email"), {'email': email}).fetchone()
         if user is not None:
             flash("An account with this email already exists.")
             return redirect(url_for('create_account'))
         else:
-            conn.execute(text("INSERT INTO register VALUES (:name, :email, :username, :password, :userID, :account_type)"),request.form)
+            conn.execute(text("INSERT INTO register VALUES (:name, :email, :username, :password, :userID, :account_type)"), request.form)
             conn.commit()
             flash("Account created successfully.")
             return redirect(url_for('home'))
     return render_template("register.html")
 
 
-#
-# ##login
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if request.method == "POST":
-#         username = request.form['username']
-#         password = request.form['password']
-#         if password == 'bobbyS' or 'Asing!':
-#             password = password
-#     else:
-#         password = p(password)
-#     message = text("SELECT * FROM register WHERE username = :username AND password = :password")
-#     info = {"username": username, "password": password}
-#     solution = conn.execute(message,info)
-#     account = solution.fetchone()
-#     if account is None:
-#         return render_template('index.html')
-#     else:
-#         session['name'] = account[0]
-#         session['email'] = account[1]
-#         session['username'] = account[2]
-#         session['password'] = account[3]
-#         session['userID'] = account[4]
-#         session['account_type'] = account[5]
-#
-#
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if password == 'bobbyS' or password == 'Asing!':
+            password = password
+        else:
+            password = p(password)
+        query = text("SELECT * FROM register WHERE username = :username AND password = :password")
+        params = {"username": username, "password": password}
+        result = conn.execute(query, params)
+        user = result.fetchone()
+        if user is None:
+            return render_template('login.html')
+        else:
+            session['name'] = user[0]
+            session['email'] = user[1]
+            session['username'] = user[2]
+            session['userID'] = user[4]
+            session['account_type'] = user[5]
+            session['logged_in'] = True
+            if user[5] == 'admin':
+                acc = conn.execute(text("SELECT userID FROM register"))
+                return redirect(url_for('admin', acc=acc))
+            elif user[5] == 'vendor':
+                acc = conn.execute(text("SELECT userID FROM register"))
+                return redirect(url_for('vendor', acc=acc))
+            else:
+                acc = conn.execute(text("SELECT userID FROM register"))
+                return redirect(url_for('customer', acc=acc))
+    else:
+        return render_template('login.html')
+
+
+# Customer
+@app.route('/customer')
+def customer():
+    query = text("SELECT * FROM products")
+    result = conn.execute(query)
+    products = []
+    for row in result:
+        products.append(row)
+    return render_template('customer.html', products=products)
+
+
+
+# @app.route('/vendor')
+# def vendor():
+#     session_id = session.get('id')
+#     query = text("SELECT * FROM register WHERE vendor_id = :session_id")
+#     result = conn.execute(query, {'session_id': session_id})
+#     products = []
+#     for row in result:
+#         products.append(row)
+#     return render_template('vendor.html', products=products)
+
+# @app.route('/admin')
+# def customer():
+#     query = text("SELECT * FROM register")
+#     result = conn.execute(query)
+#     products = []
+#     for row in result:
+#         products.append(row)
+#     return render_template('admin.html', products=products)
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
