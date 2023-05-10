@@ -1,14 +1,29 @@
-{% extends "bases.html" %}
+{% extends "base.html" %}
 {% block body %}
+<li><a href="/vendor">VENDOR HOME</a></li>
+<li><a href="/add_product">ADD PRODUCTS</a></li>
+<li><a href="/">CHAT</a></li>
+<li><a href="/">CART</a></li>
+<li><a href="/">MY ACCOUNT</a></li>
+<li><a href="/">MY ORDERS</a></li>
+<li><a href="/">RECEIVED ORDERS</a></li>
 
-<div class="create_exam">
+
+<div class="add_product">
+    <h1>Add A Product</h1>
     <form action="/add_product" method="POST">
-        <input type="number" name="testID" placeholder="Enter test number:"> <br>
-        <input type="text" name="Q1" placeholder="Question 1:"> <br>
-        <input type="text" name="Q2" placeholder="Question 2:"> <br>
-        <input type="text" name="Q3" placeholder="Question 3:"> <br>
-        <input type="number" name="UserId" placeholder="Insert User Id:"> <br>
-        <input type="submit" value="Submit" class="input_submit">
+        <input type="text" name="title" placeholder="Enter product title:"> <br>
+        <input type="text" name="description" placeholder="Enter description:"> <br>
+        <input type="text" name="image" placeholder="Enter image URL:"> <br>
+        <input type="text" name="category" placeholder="Enter category:"> <br>
+        <input type="text" name="colors" placeholder="Enter color:"> <br>
+        <input type="text" name="sizes" placeholder="Enter product size:"> <br>
+        <input type="text" name="inventory" placeholder="Enter product inventory"> <br>
+        <input type="text" name="price" placeholder="Enter product price"> <br>
+        <input type="number" name="itemID" placeholder="Enter product itemID"> <br>
+        <input type="text" name="discount_price" placeholder="Enter discount price:"> <br>
+        <input type="text" name="vendor_id" placeholder="Enter vendor id:"> <br>
+        <input type="submit" value="Submit" class="input_submit"></input>
     </form>
 </div>
 

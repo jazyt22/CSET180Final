@@ -3,11 +3,12 @@
 
 
 	<header>
-        {% if session.logged_in %}
-        <h2>Logged in as <a href="/login">{{session.full_name}}</a></h2>
+        {% if session['username'] %}
+            <p>Logged in user: {{ session.username }}</p>
         {% else %}
-        <h2>Welcome to the Riley Is Great Shopping Network <3</h2>
+            <p>Please log in to view your account details.</p>
         {% endif %}
+    </ul>
         <div>
             <table>
                 <tbody>
@@ -18,6 +19,22 @@
             </table>
         </div>
     </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

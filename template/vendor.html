@@ -1,10 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block body %}
 
-</body>
-</html>
+<li><a href="/vendor">VENDOR HOME</a></li>
+<li><a href="/add_product">ADD PRODUCTS</a></li>
+<li><a href="/">CHAT</a></li>
+<li><a href="/">CART</a></li>
+<li><a href="/">MY ACCOUNT</a></li>
+<li><a href="/">MY ORDERS</a></li>
+<li><a href="/">RECEIVED ORDERS</a></li>
+
+<h2>vendor</h2>
+<!--<script>-->
+<!--function add_products() {-->
+<!--var popup = document.getElementById("add-product-popup")-->
+<!--popup.style.display = "block";-->
+<!--}-->
+<!--</script>-->
+<!--<div id="create-product-popup" class="popup" style="background-color: black;">-->
+<!--    <div class="popup-content">-->
+<!--        <h2>Create Product</h2>-->
+<!--        <form method="post" action="/vendor_add_product">-->
+
+{% endblock %}

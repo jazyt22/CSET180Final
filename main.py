@@ -25,6 +25,8 @@ def home():
 def create_account():
     if request.method == 'POST':
         email = request.form['email']
+        password = request.form['password']
+        password = p(password)
         user = conn.execute(text("SELECT * FROM register WHERE email=:email"), {'email': email}).fetchone()
         if user is not None:
             flash("An account with this email already exists.")
@@ -42,10 +44,10 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if password == 'bobbyS' or password == 'Asing!':
+        if password == 'bobbyS' or password == 'Asing!' or password == 'password' or password == 'musicFun5' or password == 'Budders23!':
             password = password
         else:
-            password = p(password)
+            password = password
         query = text("SELECT * FROM register WHERE username = :username AND password = :password")
         params = {"username": username, "password": password}
         result = conn.execute(query, params)
@@ -61,7 +63,7 @@ def login():
             session['logged_in'] = True
             if user[5] == 'admin':
                 acc = conn.execute(text("SELECT userID FROM register"))
-                return redirect(url_for('admin', acc=acc))
+                return redirect(url_for('Admin', acc=acc))
             elif user[5] == 'vendor':
                 acc = conn.execute(text("SELECT userID FROM register"))
                 return redirect(url_for('vendor', acc=acc))
@@ -83,16 +85,15 @@ def customer():
     return render_template('customer.html', products=products)
 
 
-
-# @app.route('/vendor')
-# def vendor():
-#     session_id = session.get('id')
-#     query = text("SELECT * FROM register WHERE vendor_id = :session_id")
-#     result = conn.execute(query, {'session_id': session_id})
-#     products = []
-#     for row in result:
-#         products.append(row)
-#     return render_template('vendor.html', products=products)
+@app.route('/vendor')
+def vendor():
+    session_id = session.get('id')
+    query = text("SELECT * FROM products WHERE vendor_id = :session_id")
+    result = conn.execute(query, {'session_id': session_id})
+    products = []
+    for row in result:
+        products.append(row)
+    return render_template('vendor.html', products=products)
 
 # @app.route('/admin')
 # def customer():
@@ -102,6 +103,19 @@ def customer():
 #     for row in result:
 #         products.append(row)
 #     return render_template('admin.html', products=products)
+
+
+@app.route('/add_product', methods = ["GET"])
+def add_product():
+    return render_template('add_product.html')
+
+@app.route('/add_product', methods = ['POST'])
+def add():
+    conn.execute(text("INSERT INTO products VALUES (:title, :description, :image, :category, :colors, :sizes, :inventory, :price, :itemID, :discount_price, :vendor_id)"), request.form)
+    conn.commit()
+    return render_template('add_product.html')
+
+
 
 
 
