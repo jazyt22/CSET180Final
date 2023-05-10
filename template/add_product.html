@@ -1,5 +1,22 @@
 {% extends "base.html" %}
 {% block body %}
+	<header>
+        {% if session['username'] %}
+            <p>Logged in user: {{ session.username }}</p>
+        {% else %}
+            <p>Please log in to view your account details.</p>
+        {% endif %}
+    </ul>
+<!--        <div>-->
+<!--            <table>-->
+<!--                <tbody>-->
+<!--                <tr>-->
+<!--                    <input type="text"><button>Search</button>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+    </header>
 <li><a href="/vendor">VENDOR HOME</a></li>
 <li><a href="/add_product">ADD PRODUCTS</a></li>
 <li><a href="/">CHAT</a></li>

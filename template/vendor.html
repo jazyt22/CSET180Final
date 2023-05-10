@@ -1,15 +1,33 @@
 {% extends "base.html" %}
 {% block body %}
 
-<li><a href="/vendor">VENDOR HOME</a></li>
-<li><a href="/add_product">ADD PRODUCTS</a></li>
-<li><a href="/">CHAT</a></li>
-<li><a href="/">CART</a></li>
-<li><a href="/">MY ACCOUNT</a></li>
-<li><a href="/">MY ORDERS</a></li>
-<li><a href="/">RECEIVED ORDERS</a></li>
-
 <h2>vendor</h2>
+	<header>
+        {% if session['username'] %}
+            <p>Logged in user: {{ session.username }}</p>
+        {% else %}
+            <p>Please log in to view your account details.</p>
+        {% endif %}
+    </ul>
+<!--        <div>-->
+<!--            <table>-->
+<!--                <tbody>-->
+<!--                <tr>-->
+<!--                    <input type="text"><button>Search</button>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+    </header>
+<a href="/vendor">VENDOR HOME</a>
+<a href="/v_add">ADD PRODUCTS</a>
+<a href="/">CHAT</a>
+<a href="/">CART</a>
+<a href="/">MY ACCOUNT</a>
+<a href="/">MY ORDERS</a>
+<a href="/">RECEIVED ORDERS</a>
+
+
 <!--<script>-->
 <!--function add_products() {-->
 <!--var popup = document.getElementById("add-product-popup")-->

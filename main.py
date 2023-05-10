@@ -61,9 +61,9 @@ def login():
             session['userID'] = user[4]
             session['account_type'] = user[5]
             session['logged_in'] = True
-            if user[5] == 'admin':
+            if user[5] == 'Admin':
                 acc = conn.execute(text("SELECT userID FROM register"))
-                return redirect(url_for('Admin', acc=acc))
+                return redirect(url_for('admin', acc=acc))
             elif user[5] == 'vendor':
                 acc = conn.execute(text("SELECT userID FROM register"))
                 return redirect(url_for('vendor', acc=acc))
@@ -85,6 +85,17 @@ def customer():
     return render_template('customer.html', products=products)
 
 
+
+
+@app.route('/admin')
+def admin():
+    query = text("SELECT * FROM products")
+    result = conn.execute(query)
+    products = []
+    for row in result:
+        products.append(row)
+    return render_template('admin.html', products=products)
+
 @app.route('/vendor')
 def vendor():
     session_id = session.get('id')
@@ -95,25 +106,52 @@ def vendor():
         products.append(row)
     return render_template('vendor.html', products=products)
 
-# @app.route('/admin')
-# def customer():
-#     query = text("SELECT * FROM register")
-#     result = conn.execute(query)
-#     products = []
-#     for row in result:
-#         products.append(row)
-#     return render_template('admin.html', products=products)
+@app.route('/v_add', methods = ['GET'])
+def ven_add():
+    return render_template('vendor_add_product.html')
+@app.route('/vendor_product', methods = ['POST'])
+def v_add_product():
+    max_product = text("select max(itemID) from products")
+    max_id = conn.execute(max_product).fetchone()[0]
+    new_id = max_id + 1 if max_id is not None else 1
+
+    title = request.form['title']
+    description = request.form ['description']
+    image = request.form ['image']
+    category = request.form ['category']
+    colors = request.form ['colors']
+    sizes = request.form ['sizes']
+    inventory = request.form ['inventory']
+    price = request.form ['price']
+    itemID = request.form ['itemID']
+    discount_price = request.form ['discount_price']
+    vendor_id = session.get('userID')
+
+    x = text("INSERT INTO products (title, description, image, category, colors,"
+              " sizes, inventory, price, itemID, discount_price, vendor_id) VALUES "
+              "(:title, :description, :image, :category, :colors, :sizes, :inventory, :price, :itemID"
+              ", :discount_price, :vendor_id)")
+    y = {"title": title, "description": description, "image" : image, "category" : category, "colors" : colors,
+        "sizes" : sizes, "inventory" : inventory, "price" : price, "itemID" : new_id, "discount_price" : discount_price,
+        "vendor_id" : vendor_id}
+    conn.execute(x,y)
+    conn.commit()
+
+    return render_template('vendor_add_product.html')
 
 
-@app.route('/add_product', methods = ["GET"])
+@app.route('/add_product', methods = ['GET'])
 def add_product():
     return render_template('add_product.html')
 
+
 @app.route('/add_product', methods = ['POST'])
 def add():
-    conn.execute(text("INSERT INTO products VALUES (:title, :description, :image, :category, :colors, :sizes, :inventory, :price, :itemID, :discount_price, :vendor_id)"), request.form)
+    conn.execute(text("INSERT INTO products VALUES (:title, :description, :image, :category, :colors,"
+                      " :sizes, :inventory, :price, :itemID, :discount_price, :vendor_id)"), request.form)
     conn.commit()
     return render_template('add_product.html')
+
 
 
 
