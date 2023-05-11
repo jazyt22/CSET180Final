@@ -87,18 +87,11 @@ def customer():
 
 
 
-@app.route('/admin')
-def admin():
-    query = text("SELECT * FROM products")
-    result = conn.execute(query)
-    products = []
-    for row in result:
-        products.append(row)
-    return render_template('admin.html', products=products)
+#vendor
 
 @app.route('/vendor')
 def vendor():
-    session_id = session.get('id')
+    session_id = session.get('userID')
     query = text("SELECT * FROM products WHERE vendor_id = :session_id")
     result = conn.execute(query, {'session_id': session_id})
     products = []
@@ -106,6 +99,8 @@ def vendor():
         products.append(row)
     return render_template('vendor.html', products=products)
 
+
+#vendor add products
 @app.route('/v_add', methods = ['GET'])
 def ven_add():
     return render_template('vendor_add_product.html')
@@ -140,6 +135,15 @@ def v_add_product():
     return render_template('vendor_add_product.html')
 
 
+#admin
+@app.route('/admin')
+def admin():
+    query = text("SELECT * FROM products")
+    result = conn.execute(query)
+    products = []
+    for row in result:
+        products.append(row)
+    return render_template('admin.html', products=products)
 @app.route('/add_product', methods = ['GET'])
 def add_product():
     return render_template('add_product.html')
@@ -153,7 +157,51 @@ def add():
     return render_template('add_product.html')
 
 
+##look at all accounts/filter both admin and vendor
+@app.route('/view_products', methods=['GET'])
+def view():
+    return render_template('view_products.html')
 
+@app.route('/view_products', methods=[ 'POST'])
+def view_products():
+    products = conn.execute(text("select * from products")).all()
+    if request.method == "POST":
+        if request.form["button"] == "My Products":
+            user_id = session.get("userID")
+            products = conn.execute(text("select * from products where vendor_id = vendor_id"), {"vendor_id" : user_id}).all()
+            conn.execute(products)
+            conn.commit()
+            return render_template("view_products.html", products=products)
+        elif request.form["button"] == "All Products":
+            products = conn.execute(text("SELECT * FROM products;")).all()
+            return render_template("view_products.html", products=products)
+        return render_template("view_products.html", products=products[:10])
+
+
+##edit products both admin and vendor
+@app.route('/edit_product', methods=["GET"])
+def edit():
+    return render_template("edit_product.html")
+@app.route('/edit_product', methods=["POST"])
+def edit_product():
+    conn.execute(text("update products set itemID = :itemID, title = :title, description = :description, "
+                      "image = :image, category = :category, colors = :colors, sizes = :sizes, inventory = :inventory,"
+                      "price = :price, itemID = :itemID, discount_price = :discount_price"
+                      " where itemID = :itemID"), request.form)
+    conn.commit()
+    return render_template("edit_product.html")
+
+
+##delete products
+@app.route('/delete', methods = ["GET"])
+def delete():
+    return render_template("delete_exam.html")
+
+@app.route('/delete', methods=["POST"])
+def delete_exams():
+    connection.execute(text("Delete from tests where testID = :testID"), request.form)
+    connection.commit()
+    return render_template("delete_exam.html")
 
 
 

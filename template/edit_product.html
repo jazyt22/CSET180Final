@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<div class="edit_product">
+    <form action="/edit_product" method="POST">
+        <input type="text" name="title" placeholder="Enter title:"> <br>
+        <input type="text" name="description" placeholder="Enter Description:"> <br>
+        <input type="text" name="image" placeholder="Enter a image URL:"> <br>
+        <input type="text" name="category" placeholder="Enter Product Category:"> <br>
+        <input type="text" name="colors" placeholder="Enter Product Color:"> <br>
+        <input type="text" name="sizes" placeholder="Enter Product Size:"> <br>
+        <input type="text" name="inventory" placeholder="Enter Product Inventory:"> <br>
+        <input type="text" name="price" placeholder="Enter Product Original Price:"> <br>
+        <input type="text" name="itemID" placeholder="Enter Product ID:"> <br>
+        <input type="text" name="discount_price" placeholder="Enter Discount Product Price:"> <br>
+        <input type="submit" value="Submit" class="input_submit"></input>
+    </form>
+</div>
+
+
+
+{% endblock %}
