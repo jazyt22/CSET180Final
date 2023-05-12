@@ -3,8 +3,14 @@
 
 
 	<header>
+        <h1>Account Information</h1>
         {% if session['username'] %}
-            <p>Logged in user: {{ session.username }}</p>
+            <p>Account Name: {{session.name}}</p>
+            <p>Your Username: {{ session.username }}</p>
+            <p>Your Email: {{session.email}}</p>
+            <p>Your Password: {{session.password}}</p>
+            <p>Your userID: {{session.userID}}</p>
+            <p>Your Account Type: {{session.account_type}}</p>
         {% else %}
             <p>Please log in to view your account details.</p>
         {% endif %}
@@ -19,30 +25,6 @@
 <!--            </table>-->
 <!--        </div>-->
     </header>
-
-<a href="/view_products">VIEW PRODUCTS</a>
-<a href="/">CHAT</a>
-<a href="/cart">CART</a>
-<a href="/accounts">MY ACCOUNT</a>
-<a href="/">MY ORDERS</a>
-<a href="/">RECEIVED ORDERS</a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 {% endblock %}

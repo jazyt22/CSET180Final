@@ -157,7 +157,7 @@ def add():
     return render_template('add_product.html')
 
 
-##look at all accounts/filter both admin and vendor
+##look at all products/filter both admin and vendor
 @app.route('/view_products', methods=['GET'])
 def view():
     return render_template('view_products.html')
@@ -195,13 +195,31 @@ def edit_product():
 ##delete products
 @app.route('/delete', methods = ["GET"])
 def delete():
-    return render_template("delete_exam.html")
+    return render_template("delete.html")
 
 @app.route('/delete', methods=["POST"])
 def delete_exams():
-    connection.execute(text("Delete from tests where testID = :testID"), request.form)
-    connection.commit()
-    return render_template("delete_exam.html")
+    conn.execute(text("Delete from products where itemID = :itemID"), request.form)
+    conn.commit()
+    return render_template("delete.html")
+
+
+##my accounts page
+# @app.route('/my_account', methods = [])
+# def account():
+#     return render_template('accounts.html')
+
+@app.route('/accounts', methods=['GET', 'POST'])
+def my_account():
+    if 'username' in session:
+        username = ['username']
+        x = text("SELECT * FROM register WHERE username = :username")
+        y = {'username': username}
+        with engine.connect() as conn:
+            accounts = conn.execute(x, y).fetchall()
+            return render_template("accounts.html", accounts=accounts)
+    else:
+        return redirect(url_for('login'))
 
 
 
