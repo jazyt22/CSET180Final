@@ -2,6 +2,30 @@
   display: inline-block;
 }
 
+ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+<!--            background-color: #c0392b;-->
+        }
+        li {
+            float: left;
+        }
+        li a {
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        li a:hover {
+            background-color: lightcoral;
+        }
+
 .logo {
   width: 45px;
 }
@@ -14,12 +38,13 @@ header li {
 }
 
 .topBar{
-  background-color: #8FBC8F;
+  background-color: floralwhite;
   display:flex;
   justify-content: space-between;
   align-items:center;
   padding: 10px;
 }
+
 
 .formSection {
   padding: 10px;
@@ -68,6 +93,7 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
   font-size: 18px;
+  background-image:url("https://static.vecteezy.com/system/resources/previews/006/575/425/original/cute-nature-floral-flower-leaf-minimalist-girly-background-wallpaper-vector.jpg");
   background-color: #B4EEB4;
   align-items: start;
   min-height: 100vh;
@@ -78,7 +104,7 @@ body {
   flex-flow: row wrap;
   padding: 30px 30px 20px 30px;
   color: #2f2f2f;
-  background-color:#698B69 ;
+  background-color:oldlace ;
   border-top: 1px solid #e5e5e5;
 }
 
@@ -202,4 +228,42 @@ padding:200px
 
 .reg{
 margin-left:100px
+}
+
+
+.products_style {
+
+  list-style-type: none;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+.products_style ul {
+  display: inline-block;
+  font-size: 20px;
+  padding: 20px;
+}
+
+
+.login_body{
+height:1000px;
+
+background-image:url(https://img.freepik.com/free-vector/hand-drawn-minimal-background_23-2149019075.jpg?w=2000"");
+}
+
+.cus_body {
+background-image:url("https://img.freepik.com/free-vector/hand-drawn-minimal-background_23-2149019075.jpg?w=2000");
+height:1000px;
+}
+
+.form_class {
+
+margin:auto;
+width:50%;
+text-align:center;
+padding:80px;
+border:3px solid black;
+margin:150px;
+margin-left:300px;
 }

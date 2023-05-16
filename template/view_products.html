@@ -9,16 +9,17 @@
 
     {%for products in products:%}
 
-
-        <ul style="list-style-type: none;">
+        <ul class="products_style" style="list-style-type: none;">
             <li>Title: {{products[0]}}</li>
             <li>Description: {{products[1]}}</li>
-            <li><img width="250px" height="300px" src="{{products[2]}}"></li>
+            <li><img width="150px" height="200px" src="{{products[2]}}"></li>
             <li>Category: {{products[3]}}</li>
             <li>Colors: {{products[4]}}</li>
             <li>Sizes: {{products[5]}}</li>
             <li>Price: {{products[7]}}</li>
             <li>Vendor ID: {{products[10]}}</li>
+            <button type="submit"><a href="/add_to_cart">Add To Cart</a></button>
+            <button type="submit"><a href="/edit_product">Edit Product</a></button><button type="submit"><a href="/delete">Delete Products</a> </button>
         </ul>
 
 
