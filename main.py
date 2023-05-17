@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, Numeric, create_engine, text
 
 app = Flask(__name__, template_folder='template')
 app.secret_key = 'Wilson02!'
+app.debug = True
 
 conn_str = "mysql://root:Wilson02!@localhost/180Final"
 engine = create_engine(conn_str, echo=True)
@@ -232,57 +233,64 @@ def my_account():
         return redirect(url_for('login'))
 
 
-#chat
-@app.route('/chat')
-def display():
-    return render_template('chat.html')
+# #chat
+# @app.route('/chat')
+# def display():
+#     return render_template('chat.html')
+#
+#
+# @app.route('/chat', methods=['GET', 'POST'])
+# def chat():
+#     if request.method == 'POST':
+#         user_username = request.form['user_username']
+#         send_username = request.form['send_username']
+#         account_type = request.form['account_type']
+#         message = request.form['message']
+#         query = text("INSERT INTO chat (user_username,send_username,account_type,"
+#                      "message) VALUES(:user_username, :send_username, :account_type, :message)")
+#         param = {"user_username": user_username, "send_username": send_username, "account_type": account_type,
+#                  "message": message}
+#         with engine.connect() as conn:
+#             conn.execute(query, param)
+#             conn.commit()
+#         return redirect(url_for('show', send_username=send_username))
+#     else:
+#         return redirect('chat')
+#
+#
+# @app.route('/show', methods=['GET', 'POST'])
+# def show():
+#     if request.method == 'POST':
+#         send_username = session.get('username')
+#         query = text("SELECT * FROM chat where send_username = :send_username")
+#         params = {'send_username': send_username}
+#         with engine.connect() as conn:
+#             chats = conn.execute(query, params)
+#             message = []
+#             for row in chats:
+#                 message.append(row)
+#         return render_template('chat.html', chats=chats, user_username=user_username)
+#     else:
+#         return render_template('chat.html')
+
+# #CART
 
 
-@app.route('/chat', methods=['GET', 'POST'])
-def chat():
-    if request.method == 'POST':
-        user_username = request.form['user_username']
-        send_username = request.form['send_username']
-        account_type = request.form['account_type']
-        message = request.form['message']
-        query = text("INSERT INTO chat (user_username,send_username,account_type,"
-                     "message) VALUES(:user_username, :send_username, :account_type, :message)")
-        param = {"user_username": user_username, "send_username": send_username, "account_type": account_type,
-                 "message": message}
-        with engine.connect() as conn:
-            conn.execute(query, param)
-            conn.commit()
-        return redirect(url_for('show', send_username=send_username))
-    else:
-        return redirect('chat')
 
 
-@app.route('/show', methods=['GET', 'POST'])
-def show():
-    if request.method == 'POST':
-        user_username = request.form['user_username']
-        query = text("SELECT * FROM chat where user_username = :user_username")
-        params = {'user_username': user_username}
-        with engine.connect() as conn:
-            chats = conn.execute(query, params).fetchall()
-        return render_template('chat.html', chat=chat, user_username=user_username)
-    else:
-        return render_template('chat.html')
-
-# #
-# @app.route('add_to_cart', methods=['POST', 'GET'])
-# def add_to_cart():
+# @app.route('/add_to_cart', methods=['POST', 'GET'])
+# def add_to_cart(conn = engine.connect()):
 #     if request.method == 'POST':
 #         query = text("SELECT * FROM products")
 #         resul = conn.execute(query)
 #         products = []
 #         for row in resul:
 #             products.append(row)
-#         max_id_query = text("SELECT MAX(cart_id) AS max_id FROM cart")
+#         max_id_query = text("SELECT MAX(cart_id) AS max_id FROM finalcarts")
 #         result = conn.execute(max_id_query).fetchone()
 #         max_id = result[0] if result[0] is not None else 1
 #
-#         ##convertng max_id
+#         # Convert max_id to an integer
 #         max_id = int(max_id)
 #         new_id = max_id + 1
 #
@@ -291,94 +299,185 @@ def show():
 #         itemID = request.form['id']
 #         image = request.form['image']
 #         price = request.form['price']
-#         total = request.form['total']
-#         shopper_id = request.form['id']
+#         amount = request.form['amount']
+#         shopper_id = session['userID']
 #         status = 'open'
 #
-#         ##check if user already has cart open
-#         open_cart_query = text("SELECT cart_id FROM cart WHERE shopper_id = :shopper_id AND status = 'open'")
+#         # Check if the user already has an open cart
+#         open_cart_query = text("SELECT cart_id FROM finalcarts WHERE shopper_id = :shopper_id AND status = 'open'")
 #         open_cart_result = conn.execute(open_cart_query, {"shopper_id": shopper_id}).fetchone()
 #         if open_cart_result:
 #             cart_id = open_cart_result[0]  # Use the existing cart_id
 #
-#             #check if item already exists in cart
-#             existing_item_query = text("SELECT * FROM cart WHERE cart_id = :cart_id AND itemID = :itemID")
+#             # Check if the item already exists in the cart
+#             existing_item_query = text("SELECT * FROM finalcarts WHERE cart_id = :cart_id AND itemID = :itemID")
 #             existing_item_result = conn.execute(existing_item_query,
 #                                                 {"cart_id": cart_id, "itemID": itemID}).fetchone()
 #             if existing_item_result:
-#                 ##item already exists so this increases the amount
-#                 existing_total = int(existing_item_result[4])
-#                 new_total = existing_total + int(total)
+#                 # Item already exists, increase the amount
+#                 existing_amount = int(existing_item_result[4])  # Accessing amount using index position
+#                 new_amount = existing_amount + int(amount)
 #
-#                 update_query = text("UPDATE cart SET total = :new_total"
+#                 update_query = text("UPDATE finalcarts SET amount = :new_amount "
 #                                     "WHERE cart_id = :cart_id AND itemID = :itemID")
 #                 update_params = {
-#                     "new_total": new_total,
+#                     "new_amount": new_amount,
 #                     "cart_id": cart_id,
 #                     "itemID": itemID
 #                 }
-#                 conn.execute(update_query, update_params)
-#                 conn.commit()
+#                 with engine.connect() as conn:
+#                     conn.execute(update_query, update_params)
+#                     conn.commit()
 #             else:
-#                 #adding to list if item doing exist in cart
-#                 query = text("INSERT INTO cart (cart_id, itemID, image, price, total, shopper_id, status)"
-#                              "VALUES (:cart_id, :itemIDm :image, :price, :total, :shopper_id, :status)")
+#                 # Item does not exist, add it to the cart
+#                 query = text("INSERT INTO finalcarts (cart_id, itemID, image, price, amount, shopper_id, status) "
+#                              "VALUES (:cart_id, :itemID, :image, :price, :amount, :shopper_id, :status)")
 #                 params = {
 #                     "cart_id": cart_id,
 #                     "itemID": itemID,
-#                     "image": image,
+#                     'image': image,
 #                     "price": price,
-#                     "total": total,
+#                     "amount": amount,
 #                     "shopper_id": shopper_id,
 #                     "status": status
 #                 }
-#                 conn.execute(query, params)
-#                 conn.commit()
+#                 with engine.connect() as conn:
+#                     conn.execute(query, params)
+#                     conn.commit()
+#                 return redirect(url_for('products'))
 #         else:
-#             #create a new cart
-#             query = text("INSERT INTO cart (cart_id, itemID, image, price, total, shopper_id, status)"
-#                             "VALUES (:cart_id, :itemIDm :image, :price, :total, :shopper_id, :status)")
-#
+#             # Create a new cart
+#             query = text("INSERT INTO finalcarts (cart_id, itemID, image, price, amount, shopper_id, status) "
+#                          "VALUES (:cart_id, :itemID, :image, :price, :amount, :shopper_id, :status)")
 #             params = {
 #                 "cart_id": cart_id,
 #                 "itemID": itemID,
-#                 "image": image,
+#                 'image': image,
 #                 "price": price,
-#                 "total": total,
+#                 "amount": amount,
 #                 "shopper_id": shopper_id,
 #                 "status": status
 #             }
-#             conn.execute(query, params)
-#             conn.commit()
+#             with engine.connect() as conn:
+#                 conn.execute(query, params)
+#                 conn.commit()
 #
-#         return redirect(url_for('customer'))
+#         return redirect(url_for('products.html'))
+
+@app.route('/add_to_cart', methods=['POST', 'GET'])
+def add_to_cart(conn=engine.connect()):
+    if request.method == 'POST':
+        query = text("SELECT * FROM products")
+        resul = conn.execute(query)
+        products = []
+        for row in resul:
+            products.append(row)
+        max_id_query = text("SELECT MAX(cart_id) AS max_id FROM finalcarts")
+        result = conn.execute(max_id_query).fetchone()
+        max_id = result[0] if result[0] is not None else 1
+
+        # Convert max_id to an integer
+        max_id = int(max_id)
+        new_id = max_id + 1
+
+        cart_id = new_id
+
+        itemID = request.form['itemID']
+        image = request.form['image']
+        price = request.form['price']
+        amount = request.form['amount']
+        shopper_id = session['userID']
+        status = 'open'
+
+        # Check if the user already has an open cart
+        open_cart_query = text("SELECT cart_id FROM finalcarts WHERE shopper_id = :shopper_id AND status = 'open'")
+        open_cart_result = conn.execute(open_cart_query, {"shopper_id": shopper_id}).fetchone()
+        if open_cart_result:
+            cart_id = open_cart_result[0]  # Use the existing cart_id
+
+            # Check if the item already exists in the cart
+            existing_item_query = text("SELECT * FROM finalcarts WHERE cart_id = :cart_id AND itemID = :itemID")
+            existing_item_result = conn.execute(existing_item_query,
+                                                {"cart_id": cart_id, "itemID": itemID}).fetchone()
+            if existing_item_result:
+                # Item already exists, increase the amount
+                existing_amount = int(existing_item_result[4])  # Accessing amount using index position
+                new_amount = existing_amount + int(amount)
+
+                update_query = text("UPDATE finalcarts SET amount = :new_amount "
+                                    "WHERE cart_id = :cart_id AND itemID = :itemID")
+                update_params = {
+                    "new_amount": new_amount,
+                    "cart_id": cart_id,
+                    "itemID": itemID
+                }
+                with engine.connect() as conn:
+                    conn.execute(update_query, update_params)
+                    conn.commit()
+            else:
+                # Item does not exist, add it to the cart
+                query = text("INSERT INTO finalcarts (cart_id, itemID, image, price, amount, shopper_id, status) "
+                             "VALUES (:cart_id, :itemID, :image, :price, :amount, :shopper_id, :status)")
+                params = {
+                    "cart_id": cart_id,
+                    "itemID": itemID,
+                    'image': image,
+                    "price": price,
+                    "amount": amount,
+                    "shopper_id": shopper_id,
+                    "status": status
+                }
+                with engine.connect() as conn:
+                    conn.execute(query, params)
+                    conn.commit()
+            return redirect(url_for('view_products'))
+        else:
+            # Create a new cart
+            query = text("INSERT INTO finalcarts (cart_id, itemID, image, price, amount, shopper_id, status) "
+                         "VALUES (:cart_id, :itemID, :image, :price, :amount, :shopper_id, :status)")
+            params = {
+                "cart_id": cart_id,
+                "itemID": itemID,
+                'image': image,
+                "price": price,
+                "amount": amount,
+                "shopper_id": shopper_id,
+                "status": status
+            }
+            with engine.connect() as conn:
+                conn.execute(query, params)
+                conn.commit()
+    return redirect(url_for('view_products'))
 
 
-# @app.route('/view_cart')
-# def view_cart():
-#     if 'id' in session:
-#         shopper_id = session['id']
-#
-#         # Retrieve cart items for the logged-in user
-#         cart_query = text("SELECT * FROM cart WHERE shopper_id = :shopper_id AND status = 'open'")
-#         cart_items = conn.execute(cart_query, {"shopper_id": shopper_id}).fetchall()
-#
-#         return render_template('cart.html', cart_items=cart_items)
-#
-#
-# @app.route('/remove_from_cart/<int:item_id>', methods=['POST'])
-# def remove_from_cart(itemID):
-#     if 'id' in session:
-#         shopper_id = session['id']
-#
-#         # Remove item from the cart
-#         remove_query = text("DELETE FROM cart WHERE itemID = :itemID AND shopper_id = :shopper_id")
-#         conn.execute(remove_query, {"itemID": itemID, "shopper_id": shopper_id})
-#         conn.commit()
-#
-#         return redirect(url_for('view_cart'))
-#
-#
+@app.route('/view_cart')
+def view_cart():
+    if 'userID' in session:
+        shopper_id = session['userID']
+        with engine.connect() as conn:
+            query = text("SELECT * FROM finalcarts WHERE shopper_id = :shopper_id AND status = 'open'")
+            items = conn.execute(query, {"shopper_id": shopper_id}).fetchall()
+# Retrieve cart items for the logged-in user
+        cart_query = text("SELECT * FROM finalcarts WHERE shopper_id = :shopper_id AND status = 'open'")
+        cart_items = conn.execute(cart_query, {"shopper_id": shopper_id}).fetchall()
+
+        return render_template('cart.html', cart_items=cart_items)
+
+
+@app.route('/remove_from_cart/<int:item_id>', methods=['POST'])
+def remove_from_cart(item_id):
+    if 'id' in session:
+        shopper_id = session['id']
+
+        # Remove item from the cart
+        remove_query = text("DELETE FROM finalcarts WHERE item_id = :item_id AND shopper_id = :shopper_id")
+        conn.execute(remove_query, {"item_id": item_id, "shopper_id": shopper_id})
+        conn.commit()
+
+        return redirect(url_for('view_cart'))
+
+
+
 # @app.route('/submit_order/<int:cart_id>', methods=['POST'])
 # def submit_order(cart_id):
 #     # Update the cart status to 'closed' in the database

@@ -7,23 +7,73 @@
     <button name="button" value="All Products">Show All Products</button>
     </form>
 
-    {%for products in products:%}
+    {%for product in products%}
 
-        <ul class="products_style" style="list-style-type: none;">
-            <li>Title: {{products[0]}}</li>
-            <li>Description: {{products[1]}}</li>
-            <li><img width="150px" height="200px" src="{{products[2]}}"></li>
-            <li>Category: {{products[3]}}</li>
-            <li>Colors: {{products[4]}}</li>
-            <li>Sizes: {{products[5]}}</li>
-            <li>Price: {{products[7]}}</li>
-            <li>Vendor ID: {{products[10]}}</li>
-            <button type="submit"><a href="/add_to_cart">Add To Cart</a></button>
-            <button type="submit"><a href="/edit_product">Edit Product</a></button><button type="submit"><a href="/delete">Delete Products</a> </button>
-        </ul>
+<script>function setDefaultValues() {
+    var itemID_input = document.getElementById("item_id_input");
+    var image_input = document.getElementById("image_input");
+    var price_input = document.getElementById("price_input");
 
+    if (itemID.value === "") {
+      itemID.value = "{{ product.itemID }}";
+    }
 
-    {% endfor %}
+    if (image.value === "") {
+      image.value = "{{ product.image }}";
+    }
+
+    if (price.value === "") {
+      price.value = "{{ product.price }}";
+    }
+  }</script>
+
+    <div class="product {{ product.category }}">
+        <img src="{{ product.image }}" class="product-image">
+        <div class="product-details">
+            <h2 class="category" name="category">{{ product.category }}</h2>
+            <h3 class="product-title" name="title">{{ product.title }}</h3>
+                <p class="product-price" name="price">{{ product.price }}</p>
+            <p class="product-vendor" name="vendor_id">Sold By {{ product.vendor_id }}</p>
+            <input type="number" name="inventory" min="1" value="1" placeholder="Quantity">
+        </div>
+    <form method="post" onsubmit="setDefaultValues()" action="{{url_for('add_to_cart')}}">
+        <input type="hidden" name="itemID" value="{{ product.itemID }}">
+        <input type="hidden" name="category" value="{{ product.category }}">
+        <input type="hidden" name="title" value="{{ product.title }}">
+        <input type="hidden" name="price" value="{{ product.price }}">
+        <input type="hidden" name="inventory" value="{{ product.inventory }}">
+        <input type="hidden" name="vendor_id" value="{{ product.vendor_id }}">
+        <input type="hidden" name="image" value="{{ product.image }}">
+        <td>
+        <div class="quantity-dropdown">
+          <label for="quantity">Quantity:</label>
+          <select name="amount" name="quantity" id="quantity">
+            {% for quantity in range(1, 11) %}
+            <option value="{{ quantity }}">{{ quantity }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit">Add To Cart</button>
+    </form>
+    <label for="colors">Select a Color</label>
+    <select id="colors" name="colors">
+        <option value="Red">Red</option>
+        <option value="Green">Green</option>
+        <option value="Blue">Blue</option>
+        <option value="Black">Black</option>
+        <option value="White">White</option>
+    </select>
+        <label for="sizes">Select a Size</label>
+        <select id="sizes" name="sizes">
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+            <option value="XL">XL</option>
+            <option value="XX Large">XX Large</option>
+        </select>
+        {% endfor %}
+        </div>
+    </form>
 
 
 {% endblock %}
