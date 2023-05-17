@@ -70,37 +70,69 @@ button[type="submit"] {
   border-radius: 5px;
   cursor: pointer;
 }
-ul {
+.chat-history {
+  margin: 50px auto;
+  max-width: 800px;
+}
+
+.chat-history ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-li {
-  margin-bottom: 5px;
-  color: black;
-}
-p.sent{
-color: white
-}
-.sent {
-    color: white;
-    background-color: #c0392b;
-    padding: 5px;
-    border-radius: 5px;
-    display: inline-block;
-    margin-right: 10px;
-}
-.received {
-    color: #333;
-    background-color: #f1f1f1;
-    padding: 5px;
-    border-radius: 5px;
-    display: inline-block;
-    margin-right: 10px;
+
+.chat-history li {
+  margin-bottom: 10px;
 }
 
-.chat {
-text
+.chat-history .sent,
+.chat-history .received {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-history .sent {
+  flex-direction: row-reverse;
+}
+
+.chat-history .sent p,
+.chat-history .received p {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 10px 0 0;
+}
+
+.chat-history .sent p {
+  color: #fff;
+  background-color: #c0392b;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.chat-history .received p {
+  color: #333;
+  background-color: #f1f1f1;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.chat-history .sent span,
+.chat-history .received span {
+  font-size: 16px;
+  margin: 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.chat-history .sent span {
+  color: #fff;
+  background-color: #c0392b;
+}
+
+.chat-history .received span {
+  color: #333;
+  background-color: #f1f1f1;
 }
 
 </style>

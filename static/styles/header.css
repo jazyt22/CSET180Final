@@ -73,6 +73,10 @@ body {
   min-height: 100vh;
 }
 
+.delete_pro {
+margin:200px;
+}
+
 .footer {
   display: flex;
   flex-flow: row wrap;

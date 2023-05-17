@@ -1,6 +1,96 @@
 {% extends "base.html" %}
 {% block body %}
 
+<div class="login_body">
+<h2>You Have A Customer Account</h2>
+	<header>
+
+        {% if session['username'] %}
+            <p>Logged in user: {{ session.username }}</p>
+        {% else %}
+            <p>Please log in to view your account details.</p>
+        {% endif %}
+<div class="dropdown">
+  <button class="dropbtn">Nav</button>
+  <div class="dropdown-content">
+    <a href="/customer">CUSTOMER HOME</a>
+    <a href="/view_products">VIEW PRODUCTS</a>
+    <a href="/add_product">ADD PRODUCTS</a>
+    <a href="/edit_product">EDIT PRODUCT</a>
+    <a href="/delete">DELETE PRODUCT</a>
+    <a href="/chat">CHAT</a>
+    <a href="/view_cart">CART</a>
+    <a href="/accounts">MY ACCOUNT</a>
+    <a href="/">MY ORDERS</a>
+    <a href="/">RECEIVED ORDERS</a>
+  </div>
+</div>
+
+</header>
+<!--        <div>-->
+<!--            <table>-->
+<!--                <tbody>-->
+<!--                <tr>-->
+<!--                    <input type="text"><button>Search</button>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+
+
+
+
+<!--<a href="/customer">Customer Function</a>-->
+
+<style>
+/* Style The Dropdown Button */
+.dropbtn {
+  background-color: lightcoral;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}
+</style>
 <style>
 table {
   width: 100%;
@@ -92,74 +182,16 @@ tr[data-recipient-id="{{ session.id }}"] td:nth-child(4) {
     <link rel="stylesheet" type="text/css" href="../static/styles/admin.css">
 </head>
 <body>
-    <header>
-    {% if session.logged_in %}
-        {% if session.type == 'Vendor' %}
-            <!-- Vendor-specific items -->
-            <h2>Welcome Vendor {{ session.username }}</h2>
-            <!-- Add vendor-specific content here -->
-        {% elif session.type == 'Admin' %}
-            <!-- Admin-specific items -->
-            <h2>Welcome Admin {{ session.username }}</h2>
-            <!-- Add admin-specific content here -->
-        {% else %}
-            <!-- Customer-specific items -->
-            <h2>Welcome Customer <a href="/accinfo">{{ session.username }}</a></h2>
-            <!-- Add customer-specific content here -->
-        {% endif %}
-    {% else %}
-        <h2>Welcome to the Riley Is Great Shopping Network &lt;3</h2>
-    {% endif %}
-
-    <nav>
-        <ul>
-            {% if session.logged_in %}
-        {% if session.type == 'Vendor' %}
-            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-			<li><a href="#" onclick="viewProducts()">View All Products</a></li>
-            <li><a href="#" onclick="createproducts()">Add New Product</a></li>
-			<li><a href="/viewchats" onclick="viewChats()">View Chats</a></li>
-            <li><a href="/customer">Customer View</a></li>
-        {% elif session.type == 'Admin' %}
-            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-			<li><a href="#" onclick="viewProducts()">View All Products</a></li>
-            <li><a href="#" onclick="createproducts()">Add New Product</a></li>
-			<li><a href="/viewchats" onclick="viewChats()">View Chats</a></li>
-            <li><a href="/customer">Customer View</a></li>
-        {% else %}
-            <li><a href="/">Home</a></li>
-            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-            <li><a href="/viewchats" onclick="viewChats()">Chat With Us!</a></li>
-            <li><a href="/view_cart">View Cart</a></li>
-
-
-        {% endif %}
-    {% else %}
-            <li><a href="/in">Log In</a></li>
-            <li><a href="/register">Register</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-        <div>
-            <table>
-                <tbody>
-                <tr>
-                    <input type="text"><button>Search</button>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </header>
 <section>
           <h1>Cart</h1>
   {% if cart_items %}
     <div class="cart-items">
       {% for item in cart_items %}
         <div class="product-block">
-          <img src="{{ item.image }}" alt="Product Image">
+          <img width="150px" height="200px"  src="{{ item.image }}" alt="Product Image">
           <p>{{ item.price }}</p>
           <p>{{ item.amount }}</p>
-          <form action="{{ url_for('remove_from_cart', item_id=item.item_id) }}" method="POST">
+          <form action="{{ url_for('remove_from_cart', itemID=item.itemID) }}" method="POST">
             <button type="submit" class="btn-remove">Remove from Cart</button>
           </form>
         </div>
