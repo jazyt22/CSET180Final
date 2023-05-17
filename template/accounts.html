@@ -25,6 +25,16 @@
 <!--            </table>-->
 <!--        </div>-->
     </header>
+<h3>Confirmed Orders:</h3>
+<ul>
+    {% for order in orders %}
+    <h2>Total: ${{ total }}</h2>
 
+    <h3>Ordered Items:</h3>
+    {{order.cart_id}}
+    <ul>
+    </ul>
+    {% endfor %}
+</ul>
 
 {% endblock %}
